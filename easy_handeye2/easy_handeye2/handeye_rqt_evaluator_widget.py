@@ -180,9 +180,22 @@ class RqtHandeyeEvaluatorWidget(QWidget):
 
             translations = [translation_from_msg(t) for t in self.measurement_transforms]
             translations_np = np.array(translations)
-            translations_avg = translations_np.mean(axis=0)
-            translations_from_avg = translations_np - translations_avg
-            translations_max_divergence = np.max(translations_from_avg)
+
+
+            # もともとの処理
+            # translations_avg = translations_np.mean(axis=0)
+            # translations_from_avg = translations_np - translations_avg
+            # translations_max_divergence = np.max(translations_from_avg)
+
+            
+            #####################################自分で追加した行
+            translations_norm = np.linalg.norm(translations_np, axis=1) 
+            translations_norm_avg = translations_norm.mean(axis = 0) 
+            translations_norm_from_avg = translations_norm - translations_norm_avg
+            translatoins_norm_max_divergence = np.max(translations_norm_from_avg)
+            translations_max_divergence = translatoins_norm_max_divergence
+            #########################################################
+
             self._node.get_logger().info("Maximum divergence: {}".format(translations_max_divergence))
 
             self._widget.doubleSpinBox_error.setEnabled(True)
